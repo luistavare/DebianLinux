@@ -132,4 +132,27 @@ a2ensite example-ssl.conf
 
 ```
 
+# Instalar o Ubuntu Cliente:
+```
+1.
+sudo apt install -y xfce4 xfce4-goodies
+
+2.
+sudo apt install -y xrdp chromium-browser filezilla
+
+3.
+sudo adduser xrdp ssl-cert
+
+4.
+sudo adduser maria
+
+5.
+login example
+
+6.
+echo xfce4-session > ~/.xsession
+```
+
+
+
 
