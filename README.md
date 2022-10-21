@@ -116,6 +116,8 @@ cd etc/apache2/sites-enabled/
 a2dissite 000-default.conf 
 
 a2ensite example
+
+a2enmod ssl
 ```
 Para usar nomes de dominios existentes:
 ```
