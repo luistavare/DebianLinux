@@ -84,8 +84,10 @@ Criar a sua propria página:
 ```
 1.
  cd /etc/apache2/sites-available
-2.
+2. http
  cp 000-default.conf example.conf
+3.
+  cp default-ssl.conf exemple-ssl.conf
 
 Exemplo HTTP:
 
