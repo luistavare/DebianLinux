@@ -11,6 +11,11 @@ As vezes vai pedir para reiniciar
 $ sudo reboot
 ```
 
+mudar o hostname (para atualizar o hostname é preciso reiniciar):
+```
+$ sudo hostnamectl set-hostname <nome>.enta.pt
+```
+
 # server 
 
 ## apache 
@@ -18,12 +23,7 @@ $ sudo reboot
 
 mudar para root:
 ```
-sudo su - 
-```
-
-mudar o hostname:
-```
-hostnamectl set-hostname <nome>.enta.pt
+$ sudo su - 
 ```
 
 instalar o apage:
@@ -34,72 +34,61 @@ apt install apache2
 verificar se a porta 80 esta aberta:
 ```
 ss -tln
+
+State   Recv-Q    Send-Q    Local Address:Port    Peer Address:Port                       
+LISTEN  0         4096      127.0.0.53%lo:53      0.0.0.0:*                   
+LISTEN  0         128       0.0.0.0:22            0.0.0.0:*                                                             
+LISTEN  0         511       *:80                  *:*                                                    
+LISTEN  0         128       [::]:22               [::]:*   
+
 ```
 
+pasta de config do apache: 
+```
+cd /etc/apache2/
+```
 
-editar o html:
+Pasta do html o html:
 ```
-cd cd /var/www/html
-nano index.html
+cd /var/www/
 ```
-criar as parastas:
+
+criar 3 parastas no `/var/www/`:
 ```
 mkdir oriental central ocidental
 ```
 
 enviar texto para as pastas:
 ```
-exemplo:
-  echo "bem vindo a www.ocidental.pt!" > ocidental/index.html
+echo "bem vindo a www.ocidental.pt!" > ocidental/index.html
 ```
 
 
-config apache 
+## Criar a sua propria página:
+* Ir para a pasta:
 ```
-/etc/apache2/
-|-- apache2.conf
-|       `--  ports.conf
-|-- mods-enabled
-|       |-- *.load
-|       `-- *.conf
-|-- conf-enabled
-|       `-- *.conf
-|-- sites-enabled
-|       `-- *.conf
-
+cd /etc/apache2/sites-available
 ```
-
-Raízes do Documento  / permissoes   
+1. http
 ```
-/var/www/html
-/etc/apache2/apache2.conf
+cp 000-default.conf example.conf
 ```
-
-Criar um documento e o rederecionar:
+2. https:
 ```
-echo "Bem vindo a www.example.pt!" > example/index.html
+cp default-ssl.conf exemple-ssl.conf
 ```
-
-Criar a sua propria página:
+## Exemplo dos sites
+* Exemplo HTTP:
 ```
-1.
- cd /etc/apache2/sites-available
-2. http
- cp 000-default.conf example.conf
-3.
-  cp default-ssl.conf exemple-ssl.conf
-
-Exemplo HTTP:
-
 <VirtualHost www.ocidenta.pt:80>
         
         ServerName www.ocidental.pt (descomentar) 
         
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/ocidental 
-
-Exemplo de HTTPS: 
-
+```
+* Exemplo de HTTPS: 
+```
 <IfModule mod_ssl.c>
         <VirtualHost wwww.central.pt:443>
                 ServerAdmin webmaster@localhost
@@ -109,70 +98,69 @@ Exemplo de HTTPS:
 
 ```
 
-Ativar o website e desativar o default:
+## Ativar os sites
+1. Ir para a pasta `/etc/apache2/sites-enabled`. 
+
+Desativar o site 000-default: 
 ```
-cd etc/apache2/sites-enabled/
-
 a2dissite 000-default.conf 
-
+```
+2. Ativar o teu site:
+```
 a2ensite example
+```
+* Verificar se está ligado:
+```
+lrwxrwxrwx 1 root root 35 Oct 21 09:44 central-ssl.conf -> ../sites-available/central-ssl.conf
+lrwxrwxrwx 1 root root 31 Oct 21 09:34 central.conf -> ../sites-available/central.conf
+lrwxrwxrwx 1 root root 37 Oct 21 09:44 ocidental-ssl.conf -> ../sites-available/ocidental-ssl.conf
+lrwxrwxrwx 1 root root 33 Oct 21 09:34 ocidental.conf -> ../sites-available/ocidental.conf
+lrwxrwxrwx 1 root root 36 Oct 21 09:44 oriental-ssl.conf -> ../sites-available/oriental-ssl.conf
+lrwxrwxrwx 1 root root 32 Oct 21 09:34 oriental.conf -> ../sites-available/oriental.conf
+```
 
+* Ativar a porta 443 para o HTTPS:
+```
 a2enmod ssl
 ```
-Para usar nomes de dominios existentes:
+
+
+
+## Para usar nomes de dominios existentes:
+
+Alter o ficheiro dos `hosts`
 ```
-1.
 nano /etc/hosts
-
-2.
-ipprivado + dominio
-
-3.
-cd /etc/apache2/sites-available
-
-4.
-nano example.conf
-
-5. 
-#ServerName www.example.com
 ```
 
-Ativar o https:
+Oque mudar no ficheiro:
 ```
-1.
-cd /etc/apache2/sites-available
-
-2.
- cp default-ssl.conf example-ssl.conf
- 
-3.
-<VirtualHost www.example.pt:443>
-                ServerAdmin webmaster@localhost
-
-                DocumentRoot /var/www/example
-4.
-a2ensite example-ssl.conf 
-
+ip_privado + dominio
 ```
 
 # Instalar o Ubuntu Cliente:
+
+Instalar o desktop:
 ```
-1.
 sudo apt install -y xfce4 xfce4-goodies
-
-2.
+```
+Instalar o RDP, Chromium e o filezilla:
+```
 sudo apt install -y xrdp chromium-browser filezilla
-
-3.
+```
+Adicionar o RDP ao ssl-cert:
+```
 sudo adduser xrdp ssl-cert
+```
 
-4.
+adicior um user 
+```
 sudo adduser maria
-
-5.
+```
+```
 login example
-
-6.
+```
+```
 echo xfce4-session > ~/.xsession
 ```
 
